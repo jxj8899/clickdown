@@ -1,0 +1,52 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: clickdown
+    container_name: clickdown
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/var/www
+    networks:
+      - laravel
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: clickdown
+      DB_USERNAME: root
+      DB_PASSWORD: joganteng123
+
+  webserver:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"  # Map host port 3307 to container port 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: joganteng123
+      MYSQL_DATABASE: clickdown
+    networks:
+      - laravel
+
+
+
+volumes:
+  db_data:
+
+networks:
+  laravel:
