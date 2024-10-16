@@ -1,0 +1,8 @@
+[build]
+  publish = "public"
+  command = "composer install && php artisan key:generate && php artisan migrate --force && php artisan cache:clear"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.php"
+  status = 200
